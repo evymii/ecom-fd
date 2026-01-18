@@ -1,15 +1,22 @@
 import axios from 'axios';
 
-// Force port 5001 - update this if backend port changes
+// Get API URL from environment variable or default to localhost
+// In production, NEXT_PUBLIC_API_URL should be set in Vercel environment variables
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+
+// Normalize API URL - ensure it ends with /api (without double /api or trailing slashes)
+let normalizedApiUrl = API_URL.trim().replace(/\/+$/, ''); // Remove trailing slashes
+if (!normalizedApiUrl.endsWith('/api')) {
+  normalizedApiUrl = `${normalizedApiUrl}/api`;
+}
 
 // Log API URL in development to help debug
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-  console.log('🔗 API URL:', API_URL);
+  console.log('🔗 API URL:', normalizedApiUrl);
 }
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: normalizedApiUrl,
   withCredentials: true,
   timeout: 10000, // 10 second timeout
 });

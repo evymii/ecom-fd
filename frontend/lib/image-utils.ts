@@ -17,7 +17,8 @@ export function getImageUrl(url: string): string {
   
   // If it's a relative path, make it absolute
   // Backend URL without /api suffix
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5001';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+  const backendUrl = apiUrl.replace(/\/api\/?$/, '') || 'http://localhost:5001';
   const cleanUrl = url.startsWith('/') ? url : '/' + url;
   return `${backendUrl}${cleanUrl}`;
 }
